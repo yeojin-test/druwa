@@ -4,7 +4,7 @@
 
 만든사람: 김여진
 만든날짜: 2018.5.30
-Lisence: MIT(or 500won)
+License: MIT(or 500won)
 
 + 만약 모듈로 쓴다면 Manager 클래스만 사용하자
 + ex) from NaverWebtoonCrawler import Manager
