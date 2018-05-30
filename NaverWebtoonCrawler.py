@@ -395,7 +395,7 @@ if __name__ == '__main__':
 
     # ban8 인스턴스(웹툰)의 3~8번 에피소드 이미지 크롤링
     print('---test6---')
-    Manager.download_episode(죽음에_관하여, 3, 8)
+    Manager.download_episode(ban8, 3, 8)
     print('\n\n')
 
     # 죽음에_관하여 웹툰의 모든 에피소드 크롤링
