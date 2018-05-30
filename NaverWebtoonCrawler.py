@@ -393,9 +393,9 @@ if __name__ == '__main__':
         print(episode.title, episode.no, episode.rating)
     print('\n\n')
 
-    # ban8 인스턴스(웹툰) 208번 에피소드 이미지 크롤링
+    # ban8 인스턴스(웹툰)의 3~8번 에피소드 이미지 크롤링
     print('---test6---')
-    Manager.download_episode(죽음에_관하여, all_epi=True)
+    Manager.download_episode(죽음에_관하여, 3, 8)
     print('\n\n')
 
     # 죽음에_관하여 웹툰의 모든 에피소드 크롤링
