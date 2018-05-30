@@ -4,7 +4,7 @@
 
 만든사람: 김여진
 만든날짜: 2018.5.30
-라이센스: 500원 아니면 마음만...
+Lisence: MIT(or 500won)
 
 + 만약 모듈로 쓴다면 Manager 클래스만 사용하자
 + ex) from NaverWebtoonCrawler import Manager
@@ -14,6 +14,10 @@
 + 만들고 싶다면
 + html 생성 라이브러리 : ElementTree (https://wikidocs.net/42)
 + 웹브라우저 컨트롤 라이브러리 : webbrowser (https://docs.python.org/3.6/library/webbrowser.html)
+(2)
++ 피드백과 주석 정리 후 본 포폴용 계정에 올리기
++ 패키지로 분리할지를 고려(연습용)
++ 최적화...는 잘 모르겠음 - 웹툰 번호의 경우 int 연산이면 더 좋지 않을까?
 """
 
 import os
@@ -80,6 +84,7 @@ class CrawlerAgent:
 class Manager:
     """
     웹툰 관리자 - 크롤링 전반적인 기능을 가지고 있다
+    issue: singleton?
     """
 
     # 네이버 웹툰 get url을 만들기 위한 base url
@@ -112,7 +117,7 @@ class Manager:
         result = list()
 
         # 웹툰 이름이든 웹툰 번호든 알아서 찾아줌
-        # 그래서 느릴 것 같다
+        # 그래서 느릴 것 같다 -> webtoon_dict 구조를 수정하는 것은 너무 큰 작업 -> 계획을 잘 세우자
         for title, titleId in cls.webtoon_dict.items():
             # 웹툰 이름은 부분검색, 웹툰 번호는 전체일치
             if query in title or query == titleId:
@@ -144,7 +149,7 @@ class Manager:
         title = result['title']
         webtoon_id = result['titleId']
 
-        # 웹툰의 기본 정보는 경로 설정, 혹시 몰라서 공백 제거
+        # 웹툰의 기본 정보(info.html에 담긴다)의 경로 설정, 혹시 몰라서 공백 제거
         # info.html은 첫 번째 화면(웹툰 리스트 1페이지)
         # 여러 페이지를 받아올 수도 있겠지만... naver
         webtoon_path = f"naver_webtoon_data/webtoon_{title.replace(' ', '_')}/info.html"
@@ -158,6 +163,7 @@ class Manager:
         # 지난 시간 코드 재활용
         detail = soup.select_one('div.detail > h2')
 
+        # 요일 정보를 추가해야만 한다면 여기에!
         info = dict()
         info['title'] = detail.contents[0].strip()
         info['author'] = detail.span.get_text(strip=True)
@@ -224,8 +230,7 @@ class Manager:
             print('Webtoon 인스턴스가 아닙니다')
             return
 
-        # episode_list가 빈 리스트일 경우, Num이 잘못되었을 경우
-
+        # episode_list가 빈 리스트일 경우
         if len(webtoon.episode_list) == 0:
             print('웹툰의 에피소드 리스트 정보가 없습니다.\nupdate_webtoon() 메소드를 사용하세요')
             return
@@ -233,6 +238,7 @@ class Manager:
             # 현재 최신화 에피소드 번호
             max_num = int(webtoon.episode_list[0].no)
 
+        # min_no, max_no check!
         if max_no > max_num or min_no < 1 or min_no > max_no:
             print('웹툰 번호가 잘못되었습니다.')
             return
@@ -242,7 +248,8 @@ class Manager:
             max_no = max_num
             min_no = 1
 
-        # 이미지 다운로드 -> CrawlerAgent로 처리하면 더 느려질 것 같아 직접 구현
+        # 이미지 다운로드
+        # CrawlerAgent로 처리하면 더 느려질 것 같아 직접 구현
         for no in range(min_no, max_no + 1):
             episode_dir = f"naver_webtoon_data/webtoon_{webtoon.title.replace(' ', '_')}/{str(no)}/"
             param = {'titleId': webtoon.webtoon_id, 'no': str(no)}
@@ -250,12 +257,12 @@ class Manager:
             soup = CrawlerAgent.crawl(episode_dir + 'episode_info.html', cls.episode_base_url, param)
             imgs = soup.select('div.wt_viewer > img')
 
-            # 403 메세지를 피하기 위한 header
+            # 403 메세지를 피하기 위한 header(핵심기술)
             header = {'Referer': cls.episode_base_url + parse.urlencode(param)}
 
             # 입출력, 인터넷 연결 부분은 예외처리
             try:
-                # 이미지 다운로드 -> 그냥 바이너리로 쓴다
+                # 이미지 다운로드 -> 그냥 바이너리로 쓴다(가희님 도움)
                 for img in imgs:
                     # 이미지 파일명은 img 태그의 id 사용
                     image_file_path = episode_dir + img['id'] + '.jpg'
@@ -318,7 +325,6 @@ class Webtoon:
 
         # 웹툰 고유 ID, 6자리 숫자이나 문자열 처리(super key)
         self.webtoon_id = webtoon_id
-        self.sample = "abc"
 
         # info 딕셔너리에서 만드는 Webtoon 클래스의 인스턴스 변수들(key)
         #   title: 웹툰 이름
