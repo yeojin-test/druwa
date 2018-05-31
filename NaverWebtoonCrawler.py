@@ -31,7 +31,7 @@ from bs4 import BeautifulSoup
 __all__ = ['Manager']
 
 """
-1. 동작하는 클래스
+1. 동작하는 클래스 : CrawlerAgent, Manager
 """
 
 
@@ -311,7 +311,7 @@ class Manager:
 
 
 """
-2. 정보 구조를 갖는 클래스
+2. 정보 구조를 갖는 클래스 : Webtoon, 
 """
 
 
@@ -353,7 +353,6 @@ class Episode:
         #   title: 에피소드 이름
         #   rating: 별점
         #   created_date: 게시일
-        #   image_list: 에피소드 이미지(EpisodeImage 클래스) 리스트
         # 아래 코드가 간단하지만 툴팁에 반영이 안되는 문제가 있음
         vars(self).update(info)
 
