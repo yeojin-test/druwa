@@ -220,6 +220,11 @@ class Manager:
     def download_episode(cls, webtoon, min_no=1, max_no=1, all_epi=False):
         """
         에피소드 다운로드 메소드(철컹철컹)
+        issue: webtoon.episode_list에 없는 에피소드도 저장할 수 있어서
+                다운로드받은 이미지의 경로(url)을 저장할 적절한 자료구조가 현재 없음
+                해결책1: 경로를 리턴하는 메소드 새로 만들기
+                해결책2: episode_list에 있는 에피소드만 다운로드할 수 있게 만들고
+                        episode를 더 크롤링할 수 있게 만들기(update_webtoon 메소드 등)
         :param webtoon:
         :param min_no: 다운로드 시작 에피소드 번호, 기본값은 1(첫번째 에피소드)
         :param max_no: 다운로드 끝 에피소드 번호, 기본값은 1(첫번째 에피소드)
