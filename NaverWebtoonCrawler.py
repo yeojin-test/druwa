@@ -4,7 +4,6 @@
 
 만든사람: 김여진
 만든날짜: 2018.5.30
-License: MIT(or 500won)
 
 + 만약 모듈로 쓴다면 Manager 클래스만 사용하자
 + ex) from NaverWebtoonCrawler import Manager
@@ -170,6 +169,7 @@ class Manager:
         info['description'] = soup.select_one('div.detail > p').get_text()
 
         # with_episode 플래그에 따라 episode_list 크롤링
+        # issue: 첫 페이지의 에피소드만 크롤링하는 문제가 있다(download_episode() 메소드 참고)
         if with_episode:
             episode_info_list = soup.select('table.viewList > tr')
 
