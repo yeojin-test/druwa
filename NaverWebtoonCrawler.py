@@ -311,7 +311,8 @@ class Manager:
 
 
 """
-2. 정보 구조를 갖는 클래스 : Webtoon, 
+2. 정보 구조를 갖는 클래스 : Webtoon, Episode
+issue: EpisodeImage에 대한 리스트 
 """
 
 
